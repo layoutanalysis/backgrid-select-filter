@@ -41,7 +41,7 @@
       var shadowCollection = this.shadowCollection = collection.clone();
 
       this.listenTo(collection, "add", function (model, collection, options) {
-        shadowCollection.add(model, _.extend(options || {},{merge:true}));
+        shadowCollection.add(model, _.extend(options || {},{merge:true, reindex: true}));
       });
       this.listenTo(collection, "remove", function (model, collection, options) {
         shadowCollection.remove(model, options);
