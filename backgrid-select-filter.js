@@ -41,8 +41,17 @@
       var shadowCollection = this.shadowCollection = collection.clone();
 
       this.listenTo(collection, "add", function (model, collection, options) {
-        shadowCollection.add(model, _.extend(options || {},{merge:true, reindex: true}));
+        shadowCollection.add(model, options);
       });
+
+      this.listenTo(collection, "change", function (model, collection, options) {
+        //shadowCollection.add(model, _.extend(options || {},{merge:true}));
+        shadowCollection.get(model).set(_.clone(model.attributes));
+        //this.onChange();
+        //shadowCollection.reset(collection.models,{reindex: false});
+        this.onChange();
+      });
+
       this.listenTo(collection, "remove", function (model, collection, options) {
         shadowCollection.remove(model, options);
       });
@@ -77,7 +86,7 @@
         col.pageableCollection.getFirstPage({silent: true});
 
       if (value !== this.clearValue)
-        col.reset(this.shadowCollection.filter(matcher), {reindex: false});
+        col.reset(this.shadowCollection.filter(matcher), {reindex: true});
       else
         col.reset(this.shadowCollection.models, {reindex: false});
     }
